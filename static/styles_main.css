@@ -6,10 +6,12 @@
 
 body.hero-body {
   background-color: #000;
+  background-image: linear-gradient(blue, red, black);
+  background-size: cover;
   color: #fff;
   font-family: Arial, sans-serif;
   text-align: center;
-  height: 100vh;
+/*  height: 100vh;*/
   display: flex;
   flex-direction: column;
   justify-content: space-between;
