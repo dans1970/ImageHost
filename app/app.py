@@ -7,7 +7,7 @@ from ImageHostingHandler import ImageHostingHttpRequestHandler
 from Router import Router
 from settings import SERVER_ADDRESS
 
-
+"""Создание и запуск сервера"""
 def run(server_class=HTTPServer, handler_class=ImageHostingHttpRequestHandler):
     DBManager().init_tables()
     router = Router()

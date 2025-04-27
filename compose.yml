@@ -2,6 +2,8 @@ services:
   app:
     build: ./app
     container_name: app
+    environment:
+      - TZ=$(cat /etc/timezone)
     ports:
       - "8000:8000"
     volumes:
@@ -19,6 +21,7 @@ services:
     restart: always
     container_name: nginx
     command: nginx -g "daemon off;"
+
     ports:
       - "80:80"
     volumes:
@@ -31,6 +34,7 @@ services:
     depends_on:
       - app
 
+  #Настройка PostgreSQL
   db:
     image: postgres:17-alpine
     container_name: db

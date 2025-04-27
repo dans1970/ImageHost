@@ -10,15 +10,19 @@ from settings import IMAGES_PATH, \
 
 
 class ImageHostingHttpRequestHandler(AdvancedHTTPRequestHandler):
-    server_version = 'Image Hosting Server v0.1'
+    server_version = 'Image Hosting Server v0.2'
 
+    """Количество изображений."""
     def get_images_count(self) -> None:
         count = DBManager().execute_fetch_query('SELECT COUNT(*) FROM images;')[0][0]
         logger.info('Count: ' + str(count))
+        if count==0:
+            return
         self.send_json({
             'count': count
         })
 
+    """Формирование списка изображений"""
     def get_images(self) -> None:
         page = self.headers.get('Page')
         logger.info(f'Page: {page}')
@@ -27,7 +31,7 @@ class ImageHostingHttpRequestHandler(AdvancedHTTPRequestHandler):
         logger.info(f'Query: {query}')
         images = DBManager().execute_fetch_query(query)
         if not images:
-            return self.send_json({'images': []})
+            return
 
         to_json_images = []
         for image in images:
@@ -53,7 +57,9 @@ class ImageHostingHttpRequestHandler(AdvancedHTTPRequestHandler):
         data = self.rfile.read(length)
         orig_filename = self.headers.get('Filename')
         _, ext = os.path.splitext(orig_filename)
+        """Генерация уникального имени для каждого изображения."""
         image_id = uuid4()
+        """Проверка формата файла."""
         if ext not in ALLOWED_EXTENSIONS:
             logger.warning('File type not allowed')
             self.send_html(ERROR_FILE, 400)
